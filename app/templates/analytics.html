@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View click analytics for your shortened URLs">
+    <title>Analytics — URL Shortener</title>
+    
+    <!-- Preload fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Analytics</h1>
+            <p class="subtitle">Track your shortened URL performance</p>
+        </header>
+
+        <main>
+            {% if urls %}
+            <div class="analytics-table-container" role="region" aria-label="URL Analytics">
+                <table class="analytics-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Short URL</th>
+                            <th scope="col">Original URL</th>
+                            <th scope="col">Clicks</th>
+                            <th scope="col">Created</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for url in urls %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>
+                                <a 
+                                    href="{{ base_url }}/{{ url.short_code }}" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    class="short-link"
+                                    aria-label="Short URL /{{ url.short_code }} (opens in new tab)"
+                                >
+                                    /{{ url.short_code }}
+                                </a>
+                            </td>
+                            <td class="long-url" title="{{ url.long_url }}">
+                                {{ url.long_url[:45] }}{% if url.long_url|length > 45 %}…{% endif %}
+                            </td>
+                            <td>
+                                <span class="click-count">{{ url.click_count }}</span>
+                            </td>
+                            <td class="created-date">
+                                {{ url.created_at.strftime('%b %d, %Y') if url.created_at else '—' }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state" role="status">
+                <p>📭 No URLs have been shortened yet</p>
+                <a href="/" class="btn-home">Create your first short URL</a>
+            </div>
+            {% endif %}
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <nav aria-label="Main navigation">
+                <a href="/">Home</a>
+                <a href="/analytics">Analytics</a>
+            </nav>
+            <p class="copyright">Crafted with FastAPI & SQLite</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The requested short URL was not found">
+    <title>404 — URL Not Found</title>
+    
+    <!-- Preload fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1><span class="icon">🔗</span>URL Shortener</h1>
+        </header>
+
+        <main class="error-page">
+            <div class="error-content" role="main">
+                <h1 class="error-code" aria-label="Error 404">404</h1>
+                <h2>Link Not Found</h2>
+                <p>
+                    The short URL <code>{{ base_url }}/{{ short_code }}</code> 
+                    doesn't exist or may have expired.
+                </p>
+                <a href="/" class="btn-home" aria-label="Return to home page">
+                    ← Back to Home
+                </a>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <nav aria-label="Main navigation">
+                <a href="/">Home</a>
+                <a href="/analytics">Analytics</a>
+            </nav>
+            <p class="copyright">Crafted with FastAPI & SQLite</p>
+        </footer>
+    </div>
+</body>
+</html>

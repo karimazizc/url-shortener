@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Shorten your long URLs with our modern, elegant URL shortener">
+    <title>URL Shortener — Liquid Glass</title>
+    
+    <!-- Preload fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>URL Shortener</h1>
+            <p class="subtitle">Transform long links into elegant short URLs</p>
+        </header>
+
+        <main>
+            <!-- URL Shortening Form -->
+            <form action="/shorten" method="post" class="url-form">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        name="long_url" 
+                        placeholder="Paste your long URL here..."
+                        value="{{ long_url if long_url else '' }}"
+                        required
+                        autofocus
+                        autocomplete="url"
+                        aria-label="Enter URL to shorten"
+                    >
+                    <button type="submit" aria-label="Shorten URL">
+                        Shorten
+                    </button>
+                </div>
+            </form>
+
+            <!-- Error Message -->
+            {% if error %}
+            <div class="message error" role="alert">
+                <span class="icon" aria-hidden="true">WARNING</span>
+                <p>{{ error }}</p>
+            </div>
+            {% endif %}
+
+            <!-- Success Result -->
+            {% if short_url %}
+            <div class="result" aria-live="polite">
+                <h2>Your shortened URL</h2>
+                <div class="short-url-container">
+                    <a 
+                        href="{{ short_url }}" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        class="short-url" 
+                        id="shortUrl"
+                        aria-label="Your shortened URL (opens in new tab)"
+                    >
+                        {{ short_url }}
+                    </a>
+                    <button 
+                        type="button" 
+                        class="copy-btn" 
+                        onclick="copyToClipboard()"
+                        aria-label="Copy URL to clipboard"
+                    >
+                        <span aria-hidden="true">[ ]</span>
+                        Copy
+                    </button>
+                </div>
+                <p class="copy-feedback" id="copyFeedback" aria-live="polite"></p>
+            </div>
+            {% endif %}
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <nav aria-label="Main navigation">
+                <a href="/">Home</a>
+                <a href="/analytics">Analytics</a>
+            </nav>
+            <p class="copyright">Crafted with FastAPI & SQLite</p>
+        </footer>
+    </div>
+
+    <script>
+        function copyToClipboard() {
+            const shortUrl = document.getElementById('shortUrl').textContent.trim();
+            const feedback = document.getElementById('copyFeedback');
+            const copyBtn = document.querySelector('.copy-btn');
+            
+            navigator.clipboard.writeText(shortUrl).then(() => {
+                feedback.textContent = '✓ Copied to clipboard!';
+                feedback.className = 'copy-feedback success';
+                copyBtn.innerHTML = '<span aria-hidden="true">✓</span> Copied';
+                
+                setTimeout(() => {
+                    feedback.textContent = '';
+                    feedback.className = 'copy-feedback';
+                    copyBtn.innerHTML = '<span aria-hidden="true">[ ]</span> Copy';
+                }, 2500);
+            }).catch(() => {
+                feedback.textContent = '✗ Failed to copy — please copy manually';
+                feedback.className = 'copy-feedback error';
+                
+                setTimeout(() => {
+                    feedback.textContent = '';
+                    feedback.className = 'copy-feedback';
+                }, 3000);
+            });
+        }
+    </script>
+</body>
+</html>
