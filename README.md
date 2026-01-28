@@ -79,7 +79,7 @@ docker build -t url-shortener .
 ```bash
 docker run -d \
   -p 8000:8000 \
-  -e BASE_URL=http://yourdomain.com \
+  -e BASE_URL=http://url.whisttle.cloud \
   --name url-shortener \
   url-shortener
 ```
